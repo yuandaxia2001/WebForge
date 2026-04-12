@@ -1,0 +1,49 @@
+# WebForge Evaluation Agent Dependencies
+
+# Core
+pydantic>=2.10.0
+openai>=1.60.0
+tenacity>=9.0.0
+pyyaml>=6.0
+python-dotenv>=1.0.0
+boto3>=1.37.0
+tomli>=2.0.0
+
+# Browser automation
+playwright>=1.51.0
+patchright>=1.50.0
+psutil>=5.9.0
+
+# LLM & Agent framework
+langchain-core>=0.3.0
+tiktoken>=0.9.0
+colorama>=0.4.6
+mcp>=1.5.0
+
+# Web content processing
+markdownify>=0.14.1
+html2text>=2024.2.26
+beautifulsoup4>=4.13.0
+lxml>=5.0.0
+
+# Image processing
+Pillow>=11.0.0
+
+# HTTP / Async
+httpx>=0.27.0
+aiofiles>=24.1.0
+
+# Search tools (used by openmanus thirdparty)
+googlesearch-python>=1.3.0
+baidusearch>=1.0.3
+duckduckgo_search>=7.0.0
+
+# Telemetry (used by browser-use thirdparty)
+posthog>=3.0.0
+
+# Container (used by openmanus sandbox, optional)
+docker>=7.1.0
+
+# Utilities
+numpy
+unidiff>=0.7.5

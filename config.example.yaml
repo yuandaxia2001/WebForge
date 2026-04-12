@@ -1,0 +1,149 @@
+# ============================================================
+# WebForge-Bench Evaluation Configuration
+# ============================================================
+#
+# Usage:
+#   python run_eval.py --config config.yaml --task-file tasks.jsonl --website-dir ./websites
+#
+# Copy this file and modify it for your setup:
+#   cp config.example.yaml config.yaml
+#
+# ============================================================
+
+# ------------------------------------------------------------
+# LLM Configuration (Required)
+# ------------------------------------------------------------
+# The LLM used by the browser agent to observe, reason, and act.
+# Supports any OpenAI-compatible API.
+llm:
+  # Model name as recognized by your API provider.
+  # Examples: "gemini-2.5-flash", "gpt-4o", "claude-3.5-sonnet",
+  #           "deepseek-chat", "glm-4", "qwen-max", "kimi"
+  model: "gemini-2.5-flash"
+
+  # API base URL for your provider.
+  # Examples:
+  #   Gemini:    https://generativelanguage.googleapis.com/v1beta/openai
+  #   OpenAI:    https://api.openai.com/v1
+  #   DeepSeek:  https://api.deepseek.com/v1
+  #   Qwen:      https://dashscope.aliyuncs.com/compatible-mode/v1
+  base_url: "https://generativelanguage.googleapis.com/v1beta/openai"
+
+  # Your API key. Keep this secret — do NOT commit to git.
+  api_key: "your-api-key-here"
+
+  # API type. Use "Openai" for any OpenAI-compatible API.
+  api_type: "Openai"
+
+  # Maximum number of output tokens per LLM call.
+  # Higher values allow longer reasoning but cost more.
+  # Recommended: 4096–40960 depending on model context window.
+  max_tokens: 40960
+
+  # Sampling temperature for LLM responses.
+  # 0.0 = deterministic, 1.0 = default randomness.
+  # For evaluation reproducibility, 1.0 is recommended (matching paper setup).
+  temperature: 1.0
+
+# ------------------------------------------------------------
+# Agent Configuration
+# ------------------------------------------------------------
+agent:
+  # Agent type: "full" or "simple".
+  #   - "full":   Uses record_step + browser_use + terminate.
+  #               The agent explicitly logs observation/reasoning/action at each step.
+  #               Recommended for frontier models (Gemini, Claude, GPT, Kimi).
+  #   - "simple": Uses browser_use + terminate only.
+  #               No record_step requirement — easier for smaller models.
+  #               Recommended for models that struggle with multi-tool calling.
+  type: "simple"
+
+  # Maximum number of LLM turns (steps) per task.
+  # Each turn = one LLM call + one or more browser actions.
+  # The paper uses 50 for all evaluations.
+  max_steps: 50
+
+  # LLM request timeout in seconds.
+  # If a single LLM call takes longer than this, it will be retried.
+  # Increase for slow API endpoints or large context windows.
+  llm_timeout_seconds: 600
+
+  # Number of times to retry a failed LLM call before giving up.
+  # Failures include network errors, rate limits, and timeouts.
+  llm_retry_count: 3
+
+  # Seconds to wait between LLM retry attempts.
+  # Helps with rate limiting.
+  llm_retry_wait_seconds: 10
+
+  # Whether to save execution trace (screenshots + actions at each step).
+  # Useful for debugging but generates large files.
+  save_trace: true
+
+# ------------------------------------------------------------
+# Image (Screenshot) Configuration
+# ------------------------------------------------------------
+# Controls how the browser screenshot is processed before sending to the LLM.
+image:
+  # Whether to include screenshots in the LLM input.
+  # true  = multimodal mode (screenshot + DOM text) — recommended for vision models.
+  # false = text-only mode (DOM text only) — use for text-only models like DeepSeek, GLM.
+  use_image: true
+
+  # Resize screenshot width in pixels before sending to LLM.
+  # Smaller = fewer tokens/faster, but may lose fine details.
+  # Recommended: 1024 (balances quality and cost).
+  resize_width: 1024
+
+  # Maximum screenshot height in pixels. Screenshots taller than this are cropped.
+  # Prevents extremely long pages from consuming too many tokens.
+  # Recommended: 2048.
+  max_height: 2048
+
+  # How much extra DOM content outside the visible viewport to include.
+  # 0  = current viewport only (recommended — matches paper setup).
+  # -1 = full page DOM (much more tokens, rarely needed).
+  viewport_expansion: 0
+
+  # Maximum number of screenshots to keep in LLM conversation history per turn.
+  # null (or omit) = no limit (keep all screenshots in context).
+  # Set to a small number (e.g., 3) to reduce token usage for models with
+  # limited context windows.
+  # max_images_per_turn:
+
+# ------------------------------------------------------------
+# Pipeline Configuration (for batch runs)
+# ------------------------------------------------------------
+pipeline:
+  # Number of parallel browser instances for batch evaluation.
+  # Each worker runs one task at a time in its own browser.
+  # Set based on your machine's RAM and CPU:
+  #   - 1–2:  for testing or limited resources
+  #   - 5–10: for production evaluation on a powerful machine
+  max_workers: 1
+
+# ------------------------------------------------------------
+# Judge LLM Configuration (for run_judge.py)
+# ------------------------------------------------------------
+# After the agent completes tasks, a separate "judge" LLM compares
+# the agent's answer against the ground truth to determine correctness.
+# This is the final-state evaluation described in the paper.
+#
+# Recommended: use a fast, cheap model (e.g., gemini-2.0-flash)
+# since judging is a simple comparison task.
+judge_llm:
+  # Model name for the judge LLM.
+  model: "gemini-2.0-flash"
+
+  # API base URL (can be different from the agent LLM).
+  base_url: "https://generativelanguage.googleapis.com/v1beta/openai"
+
+  # API key (can be different from the agent LLM).
+  api_key: "your-judge-api-key-here"
+
+  # Maximum output tokens for the judge response.
+  # 512 is more than enough since the judge only outputs a short JSON.
+  max_tokens: 512
+
+  # Temperature for the judge. Always use 0.0 for deterministic judging.
+  temperature: 0.0
