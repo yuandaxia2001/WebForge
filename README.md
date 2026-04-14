@@ -3,7 +3,7 @@
 <h3 align="center">Breaking the Realism-Reproducibility-Scalability Trilemma<br>in Browser Agent Benchmark</h3>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/arXiv-coming%20soon-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://arxiv.org/abs/2604.10988"><img src="https://img.shields.io/badge/arXiv-2604.10988-b31b1b.svg" alt="arXiv"></a>
   <a href="https://huggingface.co/datasets/yuandaxia/WebForge"><img src="https://img.shields.io/badge/🤗%20HuggingFace-WebForge-yellow.svg" alt="HuggingFace"></a>
   <a href="./README_zh.md"><img src="https://img.shields.io/badge/中文-README-blue.svg" alt="中文"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-green.svg" alt="License"></a>

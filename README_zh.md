@@ -3,7 +3,7 @@
 <h3 align="center">打破浏览器智能体基准测试的<br>真实性-可复现性-可扩展性三难困境</h3>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/arXiv-即将发布-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://arxiv.org/abs/2604.10988"><img src="https://img.shields.io/badge/arXiv-2604.10988-b31b1b.svg" alt="arXiv"></a>
   <a href="https://huggingface.co/datasets/yuandaxia/WebForge"><img src="https://img.shields.io/badge/🤗%20HuggingFace-WebForge-yellow.svg" alt="HuggingFace"></a>
   <a href="./README.md"><img src="https://img.shields.io/badge/English-README-blue.svg" alt="English"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-green.svg" alt="License"></a>
